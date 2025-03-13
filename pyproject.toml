@@ -1,14 +1,22 @@
 [project]
-name = "test"
+name = "iuc-demo"
 version = "0.1.0"
-description = "Add your description here"
+description = "Demo application for IUC Syd's 'automationshörna', a demo area showcasing industrial automation techniques. Integrated with Intelligent Bridge's gateway through MQTT."
+authors = [
+  {name = "Petter Melander", email = "petter.melander@nordaxon.com"},
+]
 readme = "README.md"
+
 requires-python = ">=3.12"
 dependencies = [
     "numpy>=2.2.3",
     "opencv-python>=4.11.0.86",
+    "paho-mqtt>=2.1.0",
     "python-dotenv>=1.0.1",
-    "screeninfo>=0.8.1",
     "ultralytics>=8.3.23",
-    "websockets>=15.0",
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+namespaces = true

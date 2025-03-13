@@ -1,0 +1,3 @@
+- uv sync
+- uv pip install -e . (may be unnecessary?)
+- python main.py
