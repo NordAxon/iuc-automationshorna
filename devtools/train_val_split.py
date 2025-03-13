@@ -44,7 +44,7 @@ if __name__ == "__main__":
     random.seed(42)  # For reproducibility
     
     # Configure paths
-    source_directory = "data/set_1"  # Contains 'defective' and 'non-defective' folders
-    output_directory = "data/set_1/split"  # Where train/val splits will be created
+    source_directory = "data/set_2"  # Contains 'defective' and 'non-defective' folders
+    output_directory = source_directory + "/split"  # Where train/val splits will be created
     
     split_dataset(source_directory, output_directory)
