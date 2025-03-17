@@ -1,3 +1,5 @@
+import time
+
 import paho.mqtt.client as mqtt
 
 from src.config import BROKER_IP, BROKER_PORT, JAR_SENSOR_TOPIC, DEFECT_TOPIC
@@ -16,10 +18,13 @@ def on_connect(client: mqtt.Client, userdata, flags, reason_code, properties) ->
 
 
 def on_message(client: mqtt.Client, userdata, msg) -> None:
+    start = time.time()
     logger.debug(f"Received message on topic {msg.topic}: {msg.payload}")
     if msg.topic == JAR_SENSOR_TOPIC and bytes_to_bool(msg.payload):
         result = run_inference()
+        logger.debug(f"Time from msg recv to inference complete: {time.time() - start}s")
         client.publish(DEFECT_TOPIC, bool_to_bytes(result))
+        logger.debug(f"Time from msg recv to publ: {time.time() - start}s")
         logger.debug(f"Published result {result} to topic {DEFECT_TOPIC}")
 
 
