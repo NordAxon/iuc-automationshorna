@@ -1,3 +1,4 @@
+import os
 import threading
 import time
 
@@ -16,11 +17,11 @@ class FrameGrabber:
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
             self.running = False
-            self.latest_grabbed = False
             self.lock = threading.Lock()
             self.timeout = timeout
+            self.rotate_mode = int(os.getenv("IMAGE_ROTATION"))
             self.thread = threading.Thread(target=self._grab_frames, daemon=True)
-            self.thread.start()
+            self.start()
         except Exception as e:
             logger.exception("Error starting frame grabber")
             raise e
@@ -37,27 +38,24 @@ class FrameGrabber:
     def _grab_frames(self):
         while self.running:
             with self.lock:
-                self.latest_grabbed = self.cap.grab()
-                if not self.latest_grabbed:
+                grabbed = self.cap.grab()
+                if not grabbed:
                     logger.error("Could not grab frame from camera")
-            time.sleep(0.01)
+            time.sleep(0.015)
 
     def _try_retrieve_frame(self) -> cv2.typing.MatLike | None:
         with self.lock:
-            if not self.latest_grabbed:
-                return None
-            ret, frame = self.cap.retrieve()
+            ret, frame = self.cap.read()
             if not ret:
                 logger.error("Could not retrieve frame from camera")
             else:
-                self.latest_grabbed = False
                 return frame if ret else None
 
     def retrieve_frame(self) -> cv2.typing.MatLike | None:
         start = time.time()
         while time.time() - start < self.timeout:
             frame = self._try_retrieve_frame()
-            if frame:
-                return frame
-            time.sleep(0.005)
+            if frame is not None:
+                return cv2.rotate(frame, self.rotate_mode)
+            time.sleep(0.001)
         return None
