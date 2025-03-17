@@ -25,7 +25,7 @@ def setup_logging(name: str):
     logger = logging.getLogger(name)
     log_level = os.getenv("LOG_LEVEL", "INFO").upper()
     logger.setLevel(log_level)
-    cv2.setLogLevel(CV2_LOG_LEVELS.get(log_level))
+    #cv2.setLogLevel(CV2_LOG_LEVELS.get(log_level))
 
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 

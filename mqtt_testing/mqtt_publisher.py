@@ -12,6 +12,6 @@ mqttc.loop_start()
 
 while True:
     mqttc.publish(JAR_SENSOR_TOPIC, b"1")
-    time.sleep(1)
+    time.sleep(3)
 
 mqttc.loop_stop()
