@@ -47,8 +47,11 @@ class FrameGrabber:
             if not self.latest_grabbed:
                 return None
             ret, frame = self.cap.retrieve()
-            self.latest_grabbed = False
-            return frame if ret else None
+            if not ret:
+                logger.error("Could not retrieve frame from camera")
+            else:
+                self.latest_grabbed = False
+                return frame if ret else None
 
     def retrieve_frame(self) -> cv2.typing.MatLike | None:
         start = time.time()
