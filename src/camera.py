@@ -1,10 +1,10 @@
-import os
 import threading
 import time
 
 import cv2
 
 from src.logger import setup_logging
+from src.config import IMAGE_ROTATION
 
 logger = setup_logging("camera")
 
@@ -19,7 +19,7 @@ class FrameGrabber:
             self.running = False
             self.lock = threading.Lock()
             self.timeout = timeout
-            self.rotate_mode = int(os.getenv("IMAGE_ROTATION"))
+            self.rotate_mode = IMAGE_ROTATION
             self.thread = threading.Thread(target=self._grab_frames, daemon=True)
             self.start()
         except Exception as e:

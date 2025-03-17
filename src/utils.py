@@ -1,4 +1,3 @@
-
 def bool_to_bytes(value: bool) -> bytes:
     """Convert a boolean to bytes representation."""
     return b"1" if value else b"0"

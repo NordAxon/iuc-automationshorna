@@ -1,9 +1,8 @@
 import logging
 from logging.handlers import RotatingFileHandler
-import os
 
-import cv2
 from dotenv import load_dotenv
+from src.config import LOG_LEVEL
 
 load_dotenv()
 
@@ -23,9 +22,7 @@ CV2_LOG_LEVELS = {
 
 def setup_logging(name: str):
     logger = logging.getLogger(name)
-    log_level = os.getenv("LOG_LEVEL", "INFO").upper()
-    logger.setLevel(log_level)
-    #cv2.setLogLevel(CV2_LOG_LEVELS.get(log_level))
+    logger.setLevel(LOG_LEVEL)
 
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
