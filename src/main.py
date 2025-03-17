@@ -41,6 +41,8 @@ def main():
         logger.error(f"Failed to connect to broker: {e}")
         return
 
+    time.sleep(3) # Give usb camera some time to wake up
+
     logger.info("Starting MQTT loop")
     mqttc.loop_forever()
 
