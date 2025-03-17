@@ -33,7 +33,7 @@ def run_inference() -> bool:
     frame = frame_grabber.retrieve_frame()
     if frame is None:
         logger.error("Frame capture timed out. Throwing exception.")
-        raise Exception("Could not read frame")
+        raise TimeoutError("Frame retrieval timed out. Is the camera working?")
     logger.debug(f"Frame size: {frame.shape[1]}x{frame.shape[0]}")
     logger.debug(f"Time to capture frame: {(time.time() - start) * 1000} ms")
     result = model.predict(frame, imgsz=img_height, verbose=False)[0]

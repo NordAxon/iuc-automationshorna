@@ -1,5 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
+import sys
 
 from dotenv import load_dotenv
 from src.config import LOG_LEVEL
@@ -26,7 +27,7 @@ def setup_logging(name: str):
 
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
-    console_handler = logging.StreamHandler()
+    console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
 

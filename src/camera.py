@@ -41,7 +41,7 @@ class FrameGrabber:
                 grabbed = self.cap.grab()
                 if not grabbed:
                     logger.error("Could not grab frame from camera")
-            time.sleep(0.015)
+            time.sleep(0.030)
 
     def _try_retrieve_frame(self) -> cv2.typing.MatLike | None:
         with self.lock:
