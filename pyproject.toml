@@ -10,13 +10,27 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "numpy==1.26",
-    "opencv-python>=4.11.0.86",
     "paho-mqtt>=2.1.0",
     "python-dotenv>=1.0.1",
     "ultralytics>=8.3.23",
+]
+
+[project.optional-dependencies]
+jetson = [
+    "opencv-contrib-python",
+    "torch",
+    "torchvision",
 ]
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["src*"]
 namespaces = true
+
+[[tool.uv.index]]
+url = "https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/6cc/6ecfe8a5994fd/torch-2.6.0-cp310-cp310-linux_aarch64.whl"
+
+[tool.uv.sources]
+torch = { url = "https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/6cc/6ecfe8a5994fd/torch-2.6.0-cp310-cp310-linux_aarch64.whl" }
+torchvision = { url = "https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/aa2/2da8dcf4c4c8d/torchvision-0.21.0-cp310-cp310-linux_aarch64.whl" }
+opencv-contrib-python = { url = "https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/cdb/12863a72a693d/opencv_contrib_python-4.11.0.86-cp310-cp310-linux_aarch64.whl" }

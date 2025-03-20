@@ -17,15 +17,12 @@ from src.config import (
 
 logger = setup_logging("inference")
 model = YOLO(MODEL_PATH).to(INFERENCE_DEVICE)
-img_height = IMAGE_HEIGHT
-img_width = IMAGE_WIDTH
-get_image_timeout = GET_IMAGE_TIMEOUT
 try:
-    image_source = int(IMAGE_SOURCE)
+    IMAGE_SOURCE = int(IMAGE_SOURCE)
 except ValueError:
-    image_source = IMAGE_SOURCE
+    pass
 
-frame_grabber = FrameGrabber(image_source, img_height, img_width, get_image_timeout)
+frame_grabber = FrameGrabber(IMAGE_SOURCE, IMAGE_HEIGHT, IMAGE_WIDTH, GET_IMAGE_TIMEOUT)
 
 
 def run_inference() -> bool:
@@ -36,7 +33,7 @@ def run_inference() -> bool:
         raise TimeoutError("Frame retrieval timed out. Is the camera working?")
     logger.debug(f"Frame size: {frame.shape[1]}x{frame.shape[0]}")
     logger.debug(f"Time to capture frame: {(time.time() - start) * 1000} ms")
-    result = model.predict(frame, imgsz=img_height, verbose=False)[0]
+    result = model.predict(frame, imgsz=IMAGE_HEIGHT, verbose=False)[0]
     logger.debug(f"Inference speed: {result.speed}")
     logger.debug(f"Inference probabilities: {result.verbose()}")
     result = result.probs.top1 == 0
