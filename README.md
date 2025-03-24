@@ -126,7 +126,7 @@ After that, you can run the app by running main.py using your virtual environmen
 
 ## Testing
 
-To facilitate end to end testing without having access to the actual production line, the script ```mqtt_testing/end-to-end-test.sh``` was created. This script: 
+To facilitate end to end testing without having access to the actual production line, the script ```devtools/tests/end-to-end-test.sh``` was created. This script: 
 - starts an mqtt broker running in a docker container on localhost
 - starts a python script that connects to the broker and publishes ```1``` on the jar sensor topic every three seconds
 - starts a python script that connects to the broker and prints the contents of every message received on the jar defect topic

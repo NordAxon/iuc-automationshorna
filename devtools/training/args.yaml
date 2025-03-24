@@ -1,7 +1,7 @@
 task: classify
 mode: train
 model: yolo11l-cls.pt
-data: data/set_1/split
+data: data/set_2/split
 epochs: 100
 time: null
 patience: 100
@@ -104,4 +104,4 @@ erasing: 0.0
 crop_fraction: 1.0
 cfg: null
 tracker: botsort.yaml
-save_dir: /home/petter/code/iuc-automationshorna/devtools/runs/test1
+save_dir: /home/petter/code/iuc-automationshorna/devtools/runs/test2
