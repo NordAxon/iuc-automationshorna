@@ -30,7 +30,6 @@ class FrameGrabber:
             self.running = False
             self.lock = threading.Lock()
             self.timeout = timeout
-            self.rotate_mode = IMAGE_ROTATION
             self.thread = threading.Thread(target=self._grab_frames, daemon=True)
             self.start()
         except Exception as e:
@@ -65,7 +64,7 @@ class FrameGrabber:
         while time.time() - start < self.timeout:
             frame = self._try_retrieve_frame()
             if frame is not None:
-                return cv2.rotate(frame, self.rotate_mode)
+                return cv2.rotate(frame, IMAGE_ROTATION)
             time.sleep(0.001)
         return None
 
@@ -73,16 +72,6 @@ class FrameGrabber:
 def debug_imshow(frame: cv2.typing.MatLike, result: bool) -> None:
     color = (0, 0, 255) if result else (0, 255, 0)
     height, width = frame.shape[:2]
-    thickness = 25
-    cv2.rectangle(
-        frame,
-        (
-            0,
-            0,
-        ),
-        (width - 1, height - 1),
-        color,
-        thickness,
-    )
+    cv2.rectangle(frame, (0, 0), (width - 1, height - 1), color, thickness=25)
     cv2.imshow("debug", frame)
     cv2.waitKey(1)
