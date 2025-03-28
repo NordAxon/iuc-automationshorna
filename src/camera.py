@@ -20,7 +20,9 @@ class FrameGrabber:
             else:
                 cap.release()
             if device == 9:
+                e = RuntimeError("No cameras found after checking 10 devices")
                 logger.error("Could not find any cameras")
+                raise e
 
         try:
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
