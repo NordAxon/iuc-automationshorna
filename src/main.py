@@ -35,7 +35,7 @@ def on_message(client: mqtt.Client, userdata, msg) -> None:
         jar_present = bytes_to_bool(msg.payload)
     except ValueError as e:
         logger.error(
-            f"Received message from sensor that could not be converted to bool: {e}. Not doing inference"
+            f"Received message from sensor that could not be converted to bool: {e}. Skipping inference"
         )
         jar_present = False
     if msg.topic == JAR_SENSOR_TOPIC and jar_present:

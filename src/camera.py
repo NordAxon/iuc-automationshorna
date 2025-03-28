@@ -4,16 +4,25 @@ import time
 import cv2
 
 from src.logger import setup_logging
-from src.config import IMAGE_ROTATION
+from src.config import IMAGE_ROTATION, FRAME_GRAB_INTERVAL
 
 logger = setup_logging("camera")
 
 
 class FrameGrabber:
-    def __init__(self, source: str | int, height: int, width: int, timeout: float):
-        logger.info(f"Starting frame grabber on video source {source}")
+    def __init__(self, height: int, width: int, timeout: float):
+        for device in range(10):
+            cap = cv2.VideoCapture(device)
+            if cap.grab():
+                logger.info(f"Started frame grabber on video source {device}")
+                self.cap = cap
+                break
+            else:
+                cap.release()
+            if device == 9:
+                logger.error("Could not find any cameras")
+
         try:
-            self.cap = cv2.VideoCapture(source)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
             self.running = False
@@ -38,10 +47,8 @@ class FrameGrabber:
     def _grab_frames(self):
         while self.running:
             with self.lock:
-                grabbed = self.cap.grab()
-                if not grabbed:
-                    logger.error("Could not grab frame from camera")
-            time.sleep(0.030)
+                self.cap.grab()
+            time.sleep(FRAME_GRAB_INTERVAL)
 
     def _try_retrieve_frame(self) -> cv2.typing.MatLike | None:
         with self.lock:
@@ -59,3 +66,21 @@ class FrameGrabber:
                 return cv2.rotate(frame, self.rotate_mode)
             time.sleep(0.001)
         return None
+
+
+def debug_imshow(frame: cv2.typing.MatLike, result: bool) -> None:
+    color = (0, 0, 255) if result else (0, 255, 0)
+    height, width = frame.shape[:2]
+    thickness = 25
+    cv2.rectangle(
+        frame,
+        (
+            0,
+            0,
+        ),
+        (width - 1, height - 1),
+        color,
+        thickness,
+    )
+    cv2.imshow("debug", frame)
+    cv2.waitKey(1)
