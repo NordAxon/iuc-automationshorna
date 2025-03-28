@@ -7,7 +7,6 @@ from src.logger import setup_logging
 from src.config import (
     GET_IMAGE_TIMEOUT,
     IMAGE_HEIGHT,
-    IMAGE_SOURCE,
     IMAGE_WIDTH,
     INFERENCE_DEVICE,
     LOG_LEVEL,
@@ -16,11 +15,6 @@ from src.config import (
 
 logger = setup_logging("inference")
 model = YOLO(MODEL_PATH).to(INFERENCE_DEVICE)
-try:
-    IMAGE_SOURCE = int(IMAGE_SOURCE)
-except ValueError:
-    pass
-
 frame_grabber = FrameGrabber(IMAGE_HEIGHT, IMAGE_WIDTH, GET_IMAGE_TIMEOUT)
 
 
