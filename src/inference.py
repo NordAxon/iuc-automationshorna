@@ -21,7 +21,7 @@ try:
 except ValueError:
     pass
 
-frame_grabber = FrameGrabber(IMAGE_SOURCE, IMAGE_HEIGHT, IMAGE_WIDTH, GET_IMAGE_TIMEOUT)
+frame_grabber = FrameGrabber(IMAGE_HEIGHT, IMAGE_WIDTH, GET_IMAGE_TIMEOUT)
 
 
 def run_inference() -> bool:
