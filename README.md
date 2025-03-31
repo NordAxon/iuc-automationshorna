@@ -8,9 +8,18 @@
 
 ## How it works
 
-INCLUDE PICTURES OF THE CONVEYOR BELT WITH CAMERA, AND OF THE JARS (BOTH DEFECTIVE AND NORMAL) ON THE CONVEYOR BELT, FROM THE CAMERA'S PERSPECTIVE.
-
 At the time of writing, the setup works like this: jars travel along a conveyor belt until they pass in front of an optical proximity sensor. The sensor then sends a signal to Intelligent Bridge's gateway, letting the gateway know there is a jar at the sensor's position. In response, the gateway stops the conveyor belt. Simultaneously, our program is alerted by the gateway that a jar is present and our camera, located by the sensor, captures a picture of the jar. The image of the jar is fed into an image classifier that determines if the jar is defective or not. The class of the jar is sent back to the gateway which can then act on the information, for example by instructing a robot arm to pick up and dispose of the jar if it is defective. After acting on the information from the classifier, the gateway restarts the conveyor belt, and the cycle repeats. It should be noted that the setup is modular and modifiable and may have changed by the time you are reading this.
+
+<p float="left">
+  <img alt="Image showing the conveyor belt and robot arm" align="top" src="images/conveyor.JPG" width="600" />
+  <figcaption>The conveyor belt and robot arm</figcaption>
+</p>
+
+<p float="left">
+  <img alt="Two images showing defective and non defective jars on the belt" align="top" src="images/defective.jpg" width="300" />
+  <img align="top" src="images/non-defective.jpg" width="300" />
+  <figcaption>Defective and non defective jars on the belt</figcaption> 
+</p>
 
 A diagram of the complete system is shown below, with this project's contributions outlined in green. 
 
@@ -38,7 +47,9 @@ Since the application is a demo, we had the opportunity to choose what kind of d
 
 Because we did not have access to the production line and USB camera when the training data was collected, and because we did not know exactly where the camera would be located in relation to the jars, efforts were taken to collect diverse but realistic training data that would enable the model to recognize defective jars in any photo. Therefore, images of jars were taken against different backgrounds, in different lighting, and from different distances and angles. The training images were captured using Petter's phone, in an 16:9 aspect ratio (vertical). 
 
-To collect training data of defective jars, spots, lines, drawings, squiggles, etc. were drawn on the jars with different coloured markers. To collect training data of non-defective jars, similar photos were taken of normal jars. In total, ~250 images of defective jars and ~200 of non-defective jars were taken. They can be found in NordAxon's OneDrive under ```PROJECTS/IUC Syd/data```.  
+To collect training data of defective jars, spots, lines, drawings, squiggles, etc. were drawn on the jars with different coloured markers. To collect training data of non-defective jars, similar photos were taken of normal jars. In total, ~250 images of defective jars and ~200 of non-defective jars were taken. They can be found in NordAxon's OneDrive under ```PROJECTS/IUC Syd/data/set_2```.
+
+Later, images from the conveyor belt were captured with the usb camera. However, these additional training images reduced the model's performance, causing it to classify most images on the conveyor belt as defective. As a result, these additional images were not used. They can be found in NordAxon's OneDrive under ```PROJECTS/IUC Syd/data/set_3```.
 
 #### Deployment
 
@@ -100,7 +111,7 @@ Before you can run the app, you need to create an env file. Create a file called
 
 ```
 # MQTT stuff
-BROKER_IP=localhost
+BROKER_IP=192.168.1.1
 BROKER_PORT=1883
 CONNECT_TIMEOUT=30
 JAR_SENSOR_TOPIC=iuc/robotdemo/conveyorSensor
@@ -118,11 +129,11 @@ IMAGE_HEIGHT=480
 IMAGE_WIDTH=480
 # 0 for 90 degrees, 1 for 180, 2 for 270.
 IMAGE_ROTATION=2
-IMAGE_SOURCE=0
 GET_IMAGE_TIMEOUT=0.5
+FRAME_GRAB_INTERVAL=0.030
 ```
 
-After that, you can run the app by running main.py using your virtual environment, or, assuming you installed with uv, you can run ```bash run_app.sh```. 
+After that, you can run the app by running main.py using your virtual environment, or, assuming you installed with uv, you can run ```bash run_app.sh```.
 
 ## Testing
 
