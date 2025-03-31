@@ -19,6 +19,14 @@ frame_grabber = FrameGrabber(IMAGE_HEIGHT, IMAGE_WIDTH, GET_IMAGE_TIMEOUT)
 
 
 def run_inference() -> bool:
+    """Run object detection inference on a single camera frame.
+
+    Returns:
+        bool: True if object detected belongs to class 0, False otherwise
+
+    Raises:
+        TimeoutError: If frame capture times out
+    """
     start = time.time()
     frame = frame_grabber.retrieve_frame()
     if frame is None:
