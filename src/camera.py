@@ -10,6 +10,15 @@ logger = setup_logging("camera")
 
 
 class FrameGrabber:
+    """A threaded camera frame grabber that continuously captures frames in the background.
+
+    Args:
+        source (str | int): Camera source (device index or video file path)
+        height (int): Desired frame height
+        width (int): Desired frame width
+        timeout (float): Maximum time to wait for frame retrieval
+    """
+
     def __init__(self, source: str | int, height: int, width: int, timeout: float):
         logger.info(f"Starting frame grabber on video source {source}")
         try:
@@ -27,15 +36,18 @@ class FrameGrabber:
             raise e
 
     def start(self):
+        """Start the frame grabbing thread."""
         self.running = True
         self.thread.start()
 
     def stop(self):
+        """Stop the frame grabbing thread and release camera resources."""
         self.running = False
         self.thread.join()
         self.cap.release()
 
     def _grab_frames(self):
+        """Background thread that continuously grabs frames from the camera."""
         while self.running:
             with self.lock:
                 grabbed = self.cap.grab()
@@ -44,6 +56,11 @@ class FrameGrabber:
             time.sleep(0.030)
 
     def _try_retrieve_frame(self) -> cv2.typing.MatLike | None:
+        """Attempt to retrieve a single frame from the camera.
+
+        Returns:
+            cv2.typing.MatLike | None: The captured frame or None if retrieval failed
+        """
         with self.lock:
             ret, frame = self.cap.read()
             if not ret:
@@ -52,6 +69,11 @@ class FrameGrabber:
                 return frame if ret else None
 
     def retrieve_frame(self) -> cv2.typing.MatLike | None:
+        """Retrieve a frame within the timeout period.
+
+        Returns:
+            cv2.typing.MatLike | None: The captured and rotated frame or None if retrieval timed out
+        """
         start = time.time()
         while time.time() - start < self.timeout:
             frame = self._try_retrieve_frame()
