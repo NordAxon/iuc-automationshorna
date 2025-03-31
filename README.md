@@ -32,9 +32,9 @@ To capture images from the camera, OpenCV was used. OpenCV cannot easily capture
 
 #### Training
 
-HA MED TRAINING CONFIG YAML! OCH NÄMN KANSKE BILDUPPLÖSNING?
+Training was done using the ultralytics python package. The code, and a the yaml config file, can be found in ```devtools/training```. A pretrained yolo11-large classifier was finetuned on collected images of jars. The model was trained at a resolution of 480x480 pixels. Inference is also performed at this resolution, with ultralytics handling the preprocessing. 
 
-Since the application is just a demo, we had the opportunity to choose what kind of defects to identify. For ease of collection training data, and because we only had access to six jars, it was decided that the defects would be discolorations on the sides of the jars.
+Since the application is a demo, we had the opportunity to choose what kind of defects to identify. For ease of collection training data, and because we only had access to six jars, it was decided that the defects would be discolorations on the sides of the jars.
 
 Because we did not have access to the production line and USB camera when the training data was collected, and because we did not know exactly where the camera would be located in relation to the jars, efforts were taken to collect diverse but realistic training data that would enable the model to recognize defective jars in any photo. Therefore, images of jars were taken against different backgrounds, in different lighting, and from different distances and angles. The training images were captured using Petter's phone, in an 16:9 aspect ratio (vertical). 
 

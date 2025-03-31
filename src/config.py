@@ -29,11 +29,13 @@ CONNECT_TIMEOUT = get_env_var("CONNECT_TIMEOUT", int)
 # Inference Configuration
 MODEL_PATH = get_env_var("MODEL_PATH")
 INFERENCE_DEVICE = get_env_var("INFERENCE_DEVICE")
+
+# Camera Configuration
 IMAGE_HEIGHT = get_env_var("IMAGE_HEIGHT", int)
 IMAGE_WIDTH = get_env_var("IMAGE_WIDTH", int)
-IMAGE_SOURCE = get_env_var("IMAGE_SOURCE")
 IMAGE_ROTATION = get_env_var("IMAGE_ROTATION", int)
 GET_IMAGE_TIMEOUT = get_env_var("GET_IMAGE_TIMEOUT", float)
+FRAME_GRAB_INTERVAL = get_env_var("FRAME_GRAB_INTERVAL", float)
 
 # Logging Configuration
 LOG_LEVEL = get_env_var("LOG_LEVEL")

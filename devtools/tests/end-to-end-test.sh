@@ -38,7 +38,7 @@ PGIDS+=($!)
 setsid uv run mqtt_subscriber.py &
 PGIDS+=($!)
 
-setsid uv run ../src/main.py &
+setsid uv run ../../src/main.py &
 PGIDS+=($!)
 
 echo "All services started. Press Ctrl+C to stop everything."

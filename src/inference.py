@@ -1,14 +1,12 @@
 import time
 
-import cv2
 from ultralytics import YOLO
 
-from src.camera import FrameGrabber
+from src.camera import FrameGrabber, debug_imshow
 from src.logger import setup_logging
 from src.config import (
     GET_IMAGE_TIMEOUT,
     IMAGE_HEIGHT,
-    IMAGE_SOURCE,
     IMAGE_WIDTH,
     INFERENCE_DEVICE,
     LOG_LEVEL,
@@ -17,12 +15,7 @@ from src.config import (
 
 logger = setup_logging("inference")
 model = YOLO(MODEL_PATH).to(INFERENCE_DEVICE)
-try:
-    IMAGE_SOURCE = int(IMAGE_SOURCE)
-except ValueError:
-    pass
-
-frame_grabber = FrameGrabber(IMAGE_SOURCE, IMAGE_HEIGHT, IMAGE_WIDTH, GET_IMAGE_TIMEOUT)
+frame_grabber = FrameGrabber(IMAGE_HEIGHT, IMAGE_WIDTH, GET_IMAGE_TIMEOUT)
 
 
 def run_inference() -> bool:
@@ -48,20 +41,6 @@ def run_inference() -> bool:
     logger.debug(f"Inference result: {result}")
 
     if LOG_LEVEL == "DEBUG":
-        color = (0, 0, 255) if result else (0, 255, 0)
-        height, width = frame.shape[:2]
-        thickness = 10
-        cv2.rectangle(
-            frame,
-            (
-                0,
-                0,
-            ),
-            (width - 1, height - 1),
-            color,
-            thickness,
-        )
-        cv2.imshow("debug", frame)
-        cv2.waitKey(1)
+        debug_imshow(frame, result)
 
     return result
