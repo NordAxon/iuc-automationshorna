@@ -29,6 +29,8 @@ CONNECT_TIMEOUT = get_env_var("CONNECT_TIMEOUT", int)
 # Inference Configuration
 MODEL_PATH = get_env_var("MODEL_PATH")
 INFERENCE_DEVICE = get_env_var("INFERENCE_DEVICE")
+NUM_IMAGES = get_env_var("NUM_IMAGES", int)
+INFERENCE_INTERVAL = get_env_var("INFERENCE_INTERVAL", float)
 
 # Camera Configuration
 IMAGE_HEIGHT = get_env_var("IMAGE_HEIGHT", int)

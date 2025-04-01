@@ -11,6 +11,8 @@ from src.config import (
     INFERENCE_DEVICE,
     LOG_LEVEL,
     MODEL_PATH,
+    NUM_IMAGES,
+    INFERENCE_INTERVAL,
 )
 
 logger = setup_logging("inference")
@@ -28,19 +30,27 @@ def run_inference() -> bool:
         TimeoutError: If frame capture times out
     """
     start = time.time()
-    frame = frame_grabber.retrieve_frame()
-    if frame is None:
-        logger.error("Frame capture timed out. Throwing exception.")
-        raise TimeoutError("Frame retrieval timed out. Is the camera working?")
-    logger.debug(f"Frame size: {frame.shape[1]}x{frame.shape[0]}")
-    logger.debug(f"Time to capture frame: {(time.time() - start) * 1000} ms")
-    result = model.predict(frame, imgsz=IMAGE_HEIGHT, verbose=False)[0]
-    logger.debug(f"Inference speed: {result.speed}")
-    logger.debug(f"Inference probabilities: {result.verbose()}")
-    result = result.probs.top1 == 0
-    logger.debug(f"Inference result: {result}")
+    for i in range(NUM_IMAGES):
+        frame = frame_grabber.retrieve_frame()
+        if frame is None:
+            logger.error("Frame capture timed out. Throwing exception.")
+            raise TimeoutError("Frame retrieval timed out. Is the camera working?")
+        logger.debug(f"Frame size: {frame.shape[1]}x{frame.shape[0]}")
+        logger.debug(f"Time to capture frame: {(time.time() - start) * 1000} ms")
+        result = model.predict(frame, imgsz=IMAGE_HEIGHT, verbose=False)[0]
+        logger.debug(f"Inference speed: {result.speed}")
+        logger.debug(f"Inference probabilities: {result.verbose()}")
+        result = result.probs.top1 == 0
+        logger.debug(f"Inference result: {result}")
 
-    if LOG_LEVEL == "DEBUG":
-        debug_imshow(frame, result)
+        if LOG_LEVEL == "DEBUG":
+            debug_imshow(frame, result)
+        
+        if result:
+            logger.debug("Found defect, returning True.")
+            return True
+        
+        time.sleep(INFERENCE_INTERVAL)
 
-    return result
+    logger.debug("No defect found, returning False")
+    return False
